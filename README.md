@@ -10,6 +10,20 @@ Projeto da cadeira de Sistemas Operacionais ministrada pelo Dr. Sérgio Johann F
 
 ## Como executar o projeto
 
-> go build
-> ./scheduler.exe // Windows
-> ./scheduler // UNIX
+Compilar o projeto
+
+```sh
+go build
+```
+
+Execução em ambiente Windows:
+
+```sh
+./scheduler.exe
+```
+
+Execução em ambiente UNIX:
+
+```sh
+./scheduler
+```

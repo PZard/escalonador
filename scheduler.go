@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type Process struct {
 	name             string
 	originalCpuBurst int
@@ -46,6 +48,8 @@ func scheduler(processes []Process) {
 
 		blockedCurrent := simulateCpuExecution(currentProcess)
 
+		printCycleResults(processes, currentProcess)
+
 		waitBlockeds(processes, currentProcess, blockedCurrent)
 
 		if blockedCurrent {
@@ -69,6 +73,29 @@ func scheduler(processes []Process) {
 			break
 		}
 	}
+}
+
+func printCycleResults(processes []Process, current *Process) {
+	executionLine := "|"
+	for _, process := range processes {
+		var currentState string
+
+		if process.name == current.name {
+			currentState = "R"
+		} else {
+			switch process.state {
+			case "Blocked":
+				currentState = "B"
+			case "Exit":
+				currentState = "E"
+			case "Ready":
+				currentState = "-"
+			}
+		}
+
+		executionLine += fmt.Sprintf(" %s (%d) |", currentState, process.credits)
+	}
+	fmt.Println(executionLine)
 }
 
 func getReadyProcesses(processes []Process) []*Process {
@@ -117,7 +144,7 @@ func simulateCpuExecution(process *Process) bool {
 		process.state = "Exit"
 	}
 
-	return blocked;
+	return blocked
 }
 
 func waitBlockeds(processes []Process, current *Process, blocked bool) {
@@ -159,5 +186,15 @@ func main() {
 		NewProcess("D", 0, 0, 10, 4, 3),
 	}
 
+	fmt.Println(" -------------------------------")
+	fmt.Print("|")
+	for _, process := range processList {
+		fmt.Printf("   %s   |", process.name)
+	}
+	fmt.Print("\n")
+	fmt.Println(" -------------------------------")
+
 	scheduler(processList)
+	
+	fmt.Println(" -------------------------------")
 }
